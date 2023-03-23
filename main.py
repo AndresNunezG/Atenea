@@ -9,19 +9,21 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.table import Table
 
-load_dotenv()
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
 
 class Atenea(object):
     __context = {"role": "system", "content": "Test content"}
     __messages = [__context]
 
     @classmethod
+    def __config(cls):
+        load_dotenv()
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    @classmethod
     def main(cls) -> None:
         console = Console()
         cls.__print_intro()
+        cls.__config()
         while True:
             content = cls.__parse_prompt()
             cls.__messages.append({"role": "user", "content": content})
